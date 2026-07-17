@@ -1,0 +1,5 @@
+[core]
+    remote = r2store
+['remote "r2store"']
+    url = s3://wetlands-raw-rowan/dvc
+    endpointurl = https://cab49a864db2c8fd50aa7f24700ed043.r2.cloudflarestorage.com
