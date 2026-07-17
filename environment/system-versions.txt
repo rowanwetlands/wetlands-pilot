@@ -1,0 +1,30 @@
+Recorded: 2026-07-17T13:42:49+01:00
+
+Python 3.12.3
+aws-cli/1.45.50 Python/3.12.3 Linux/6.14.0-29-generic botocore/1.43.50
+DVC version: 3.67.1 (pip)
+-------------------------
+Platform: Python 3.12.3 on Linux-6.14.0-29-generic-x86_64-with-glibc2.39
+Subprojects:
+	dvc_data = 3.18.3
+	dvc_objects = 5.2.0
+	dvc_render = 1.0.2
+	dvc_task = 0.40.2
+	scmrepo = 3.6.2
+Supports:
+	http (aiohttp = 3.14.1, aiohttp-retry = 2.9.1),
+	https (aiohttp = 3.14.1, aiohttp-retry = 2.9.1),
+	s3 (s3fs = 2026.6.0)
+Config:
+	Global: /home/rowan/.config/dvc
+	System: /etc/xdg/xdg-xfce/dvc
+Cache types: hardlink, symlink
+Cache directory: ext4 on /dev/nvme0n1p2
+Caches: local
+Remotes: s3
+Workspace directory: ext4 on /dev/nvme0n1p2
+Repo: dvc, git
+Repo.site_cache_dir: /var/tmp/dvc/repo/5c89d77a27ba317de929887d8f8e17a8
+git version 2.43.0
+gh version 2.45.0 (2025-07-18 Ubuntu 2.45.0-1ubuntu0.3)
+https://github.com/cli/cli/releases/tag/v2.45.0
