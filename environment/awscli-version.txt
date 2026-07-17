@@ -1,0 +1,1 @@
+aws-cli/1.45.50 Python/3.12.3 Linux/6.14.0-29-generic botocore/1.43.50
