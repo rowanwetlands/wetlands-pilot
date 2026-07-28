@@ -1,0 +1,26 @@
+# MONT-NS-SSSI-2025-10-16 restore test
+
+Test date: 2026-07-19T12:03:53+01:00
+Operator: Rowan
+
+## R2 raw archive
+Path: r2:wetlands-raw-rowan/naturescot/sssi/MONT-NS-SSSI-2025-10-16
+
+./SSSI_SCOTLAND.gpkg: OK
+./SSSI_SCOTLAND_GPKG_27700.zip: OK
+./SSSI_SCOTLAND_metadata.html: OK
+./SSSI_SCOTLAND_metadata.xml: OK
+./Sites of Special Scientific Interest.lyr: OK
+./Sites of Special Scientific Interest.lyrx: OK
+./Sites of Special Scientific Interest.sld: OK
+
+## B2 archive
+Path: b2-archive:wetlands-archive-raw/naturescot/sssi/MONT-NS-SSSI-2025-10-16
+
+./SSSI_SCOTLAND.gpkg: OK
+./SSSI_SCOTLAND_GPKG_27700.zip: OK
+./SSSI_SCOTLAND_metadata.html: OK
+./SSSI_SCOTLAND_metadata.xml: OK
+./Sites of Special Scientific Interest.lyr: OK
+./Sites of Special Scientific Interest.lyrx: OK
+./Sites of Special Scientific Interest.sld: OK
