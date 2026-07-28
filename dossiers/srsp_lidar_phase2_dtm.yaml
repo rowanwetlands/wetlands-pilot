@@ -1,0 +1,95 @@
+dataset_id: srsp_lidar_phase2_dtm
+site: montrose
+title: SRSP LiDAR Phase 2 DTM (1m, EPSG:27700)
+description: >
+  Scottish Remote Sensing Portal LiDAR Phase 2 Digital Terrain Model.
+  1m resolution, EPSG:27700. Creation date 05-07-2014.
+  Partial coverage of Montrose Basin AOI — smaller WMS tile response
+  than Phase 1 indicates less coverage in the AOI extent.
+  Separate survey campaign from Phase 1; kept as distinct dataset
+  for source-date band integrity.
+
+provenance:
+  source_url: https://ows.remotesensing.data.gov.scot/geoserver/ows
+  wcs_coverage_id: scotland:scotland-lidar-2-dtm
+  wcs_version: "2.0.0"
+  metadata_url: https://remotesensingdata.gov.scot/data#/list?tags=lidar
+  licence: OGL v3.0
+  redistributable: true
+  collection_period: UNKNOWN  # creation date 05-07-2014; collection period not stated in metadata
+  creation_date_stated: 05-07-2014
+  publisher: Scottish Government GI-SAT (GI-SAT@gov.scot)
+  retrieved_utc: FILL_AT_RETRIEVAL
+  retrieval_agent: rowan/manual-curl
+
+source_characteristics:
+  format: image/tiff
+  crs_native: EPSG:27700
+  crs_also_stated: ETRS89 (EPSG:4258)
+  resolution_metres: 1.0
+  bands: 1
+  band_1_name: GRAY_INDEX
+  nodata: -9999.0
+  units: metres
+  vertical_datum: ODN  # assumed consistent with Phase 1; not confirmed independently for Phase 2
+  acquisition_timestamp: UNKNOWN  # collection period not stated
+
+model_role:
+  tier: state_attributes
+  role: land_margin_elevation
+  use: >
+    Supplementary elevation source for land margins where Phase 2 coverage
+    exists within AOI. Kept separate from Phase 1 for source-date band
+    integrity. Coverage extent to be confirmed after landing.
+  dependencies:
+    requires:
+      - Phase 1 DTM (srsp_lidar_phase1_dtm) for coverage comparison
+      - Post-landing coverage analysis to determine spatial extent within AOI
+    feeds:
+      - terrain raster elevation band (land margins, Phase 2 extent only)
+      - terrain raster source-ID band
+      - terrain raster source-date band
+
+readiness:
+  band: "C"
+  readiness_by_role:
+    land_margin_elevation: "—"
+    terrain_raster_input: "—"
+
+storage:
+  bucket: wetlands-raw-rowan
+  key_prefix: montrose/srsp_lidar_phase2_dtm/2026-07-28__scotland-lidar-2-dtm/
+  filename: srsp_lidar_phase2_dtm_montrose.tif
+  sha256: c5a54098dbbfa976ebc7ed816796793d694913973d725bec7cec200966494d45
+  bytes: 100664468
+  s3_uri: s3://wetlands-raw-rowan/montrose/srsp_lidar_phase2_dtm/2026-07-28__scotland-lidar-2-dtm/srsp_lidar_phase2_dtm_montrose.tif
+
+flags:
+  - Collection period unknown — creation date only; cannot populate source-date band precisely
+  - Coverage extent in AOI smaller than Phase 1 — confirm after landing
+  - Vertical datum ODN assumed from Phase 1 documentation; not confirmed independently for Phase 2
+
+technical_notes:
+  transformation_to_epsg7405: >
+    Horizontal CRS already EPSG:27700 — no reprojection needed.
+    Vertical datum ODN implied but not explicit in file — transformation
+    to compound EPSG:7405 requires making vertical datum explicit, not
+    a coordinate conversion. Verify with gdalinfo after download.
+  resolution_implications: >
+    1m resolution consistent with Phase 1. Coverage extent smaller
+    than Phase 1 within AOI — confirm spatial extent after landing
+    before deciding whether Phase 2 adds material coverage.
+  nodata_handling: >
+    Nodata value -9999.0, consistent with Phase 1. Same gap-mask
+    treatment applies.
+  vertical_accuracy: >
+    Assumed consistent with Phase 1 (~0.1m RMSE open terrain).
+    Confirm from Phase 2 accuracy report — separate survey campaign
+    may have different stated accuracy.
+  mosaicking: >
+    Precedence rule vs Phase 1 in overlap zone is an open decision.
+    Phase 2 is later survey (2014 vs 2012) — more recent does not
+    automatically mean better; accuracy reports should decide.
+  interoperability_risk: >
+    Same as Phase 1 — verify gdalinfo output after download before
+    archiving.
