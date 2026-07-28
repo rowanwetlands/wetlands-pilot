@@ -1,0 +1,115 @@
+dataset_id: srsp_lidar_phase1_dtm
+site: montrose
+title: SRSP LiDAR Phase 1 DTM (1m, EPSG:27700)
+description: >
+  Scottish Remote Sensing Portal LiDAR Phase 1 Digital Terrain Model.
+  1m resolution, EPSG:27700. Collected March 2011 - May 2012 by Blom,
+  commissioned by Scottish Government, SEPA and Scottish Water.
+  Covers western/northwestern land margins of Montrose Basin AOI only —
+  basin interior is no-data (water masking or genuine gap, unresolved).
+  Point density minimum 1pt/sqm, approximately 2pt/sqm average.
+
+provenance:
+  source_url: https://ows.remotesensing.data.gov.scot/geoserver/ows
+  wcs_coverage_id: scotland:scotland-lidar-1-dtm
+  wcs_version: "2.0.0"
+  metadata_url: https://remotesensingdata.gov.scot/data#/list?tags=lidar
+  licence: OGL v3.0
+  redistributable: true
+  collection_period: March 2011 - May 2012
+  delivered: July 2012
+  creation_date_stated: 02-05-2012
+  publisher: Scottish Government GI-SAT (GI-SAT@gov.scot)
+  contractor: Blom (data collection); Atkins (contract)
+  retrieved_utc: FILL_AT_RETRIEVAL
+  retrieval_agent: rowan/manual-curl
+
+source_characteristics:
+  format: image/tiff
+  crs_native: EPSG:27700
+  crs_also_stated: ETRS89 (EPSG:4258)
+  resolution_metres: 1.0
+  bands: 1
+  band_1_name: GRAY_INDEX
+  nodata: -9999.0
+  units: metres
+  vertical_datum: ODN  # Ordnance Datum Newlyn — stated in SRSP project documentation; not confirmed on this metadata page
+  acquisition_timestamp: FILL_AT_RETRIEVAL  # capture period March 2011–May 2012; no per-tile timestamp available from WCS
+
+model_role:
+  tier: state_attributes
+  role: land_margin_elevation
+  use: >
+    Primary elevation source for western/northwestern land margins of
+    Montrose Basin. Input to authoritative terrain raster (elevation band
+    and source-ID band). Validation layer for derivative intertidal products.
+    Does not cover basin interior.
+  dependencies:
+    requires:
+      - Phase 2 DTM (srsp_lidar_phase2_dtm) to establish full SRSP coverage extent
+      - Coverage gap analysis to confirm boundary between LiDAR data and no-data
+    feeds:
+      - terrain raster elevation band (land margins only)
+      - terrain raster source-ID band
+      - terrain raster source-date band
+
+readiness:
+  band: "C"
+  readiness_by_role:
+    land_margin_elevation: "—"
+    terrain_raster_input: "—"
+
+storage:
+  bucket: wetlands-raw-rowan
+  key_prefix: montrose/srsp_lidar_phase1_dtm/2026-07-28__scotland-lidar-1-dtm/
+  filename: srsp_lidar_phase1_dtm_montrose.tif
+  sha256: 8fad9223d67f36dc73947104e4d9c53324509b4d765574f5369508c74f4402f1
+  bytes: 100664468
+  s3_uri: s3://wetlands-raw-rowan/montrose/srsp_lidar_phase1_dtm/2026-07-28__scotland-lidar-1-dtm/srsp_lidar_phase1_dtm_montrose.tif
+
+flags:
+  - Vertical datum ODN sourced from SRSP project documentation not this metadata record
+  - Basin interior no-data status ambiguous (water masking vs genuine gap) — do not interpret as confirmed coverage gap
+  - Units field in WCS metadata (W.m-2.Sr-1) is a known service error; data is elevation metres
+
+technical_notes:
+  transformation_to_epsg7405: >
+    Horizontal CRS already EPSG:27700 — no reprojection needed.
+    Vertical datum ODN implied but not explicit in file — transformation
+    to compound EPSG:7405 requires making vertical datum explicit, not
+    a coordinate conversion. Verify with gdalinfo after download that
+    CRS metadata is correctly embedded (WCS services sometimes strip it).
+  resolution_implications: >
+    1m is the finest source in the terrain raster stack. Target resolution
+    of the terrain raster output is an open decision — this dataset will
+    drive it. Do not resample LiDAR down without recording the decision.
+  nodata_handling: >
+    Nodata value -9999.0. Basin interior nodata is ambiguous — water
+    masking or genuine survey gap, unresolved. Must be carried into
+    gap-mask band as explicit absence, not interpolated or zeroed.
+  vertical_accuracy: >
+    SRSP states approximately 0.1m RMSE for open terrain — this is the
+    uncertainty band value for LiDAR-sourced pixels. Confirm from SRSP
+    accuracy report before populating uncertainty band.
+  mosaicking: >
+    Phase 1 and Phase 2 require overlap analysis and mosaicking at
+    derivative stage. Precedence rule in overlap zone is an open decision
+    — record before derivative is built.
+  interoperability_risk: >
+    Must verify gdalinfo output after download: CRS embedding, nodata
+    flag, band count, data type (expect Float32). Do not assume WCS
+    output is clean — check before archiving.
+
+verification:
+  stats_min: -1.02
+  stats_max: 56.86
+  stats_mean: 8.71
+  stats_valid_percent: 27.13
+  datum_verification: >
+    Value range -1.02 to 56.86m consistent with ODN at Montrose Basin.
+    Vertical datum confirmed as ODN by value range plausibility.
+    File is 2D only — vertical datum not formally embedded.
+  derivative_instruction: >
+    At derivative stage assign EPSG:7405 explicitly:
+    gdal_translate -a_srs EPSG:7405 input.tif output.tif
+    Do not modify raw file.
