@@ -68,6 +68,7 @@ flags:
   - Collection period unknown — creation date only; cannot populate source-date band precisely
   - Coverage extent in AOI smaller than Phase 1 — confirm after landing
   - Vertical datum ODN assumed from Phase 1 documentation; not confirmed independently for Phase 2
+  - LiDAR DTMs overestimate elevation in dense saltmarsh vegetation (canopy returns, not bare sediment); bias typically 0.1-0.3 m varying by vegetation class (Hladik & Alber 2012, Remote Sensing of Environment 121:224-235). Stated ~0.1 m RMSE is open-terrain only — uncertainty band must be vegetation-class-conditional, not scalar.
 
 technical_notes:
   transformation_to_epsg7405: >
@@ -83,9 +84,14 @@ technical_notes:
     Nodata value -9999.0, consistent with Phase 1. Same gap-mask
     treatment applies.
   vertical_accuracy: >
-    Assumed consistent with Phase 1 (~0.1m RMSE open terrain).
-    Confirm from Phase 2 accuracy report — separate survey campaign
-    may have different stated accuracy.
+    Assumed consistent with Phase 1 (~0.1m RMSE open terrain); confirm
+    from Phase 2 accuracy report — separate survey campaign may differ.
+    Open-terrain RMSE only: LiDAR DTMs systematically overestimate ground
+    elevation in dense saltmarsh vegetation (canopy returns, not bare
+    sediment); bias typically 0.1-0.3 m varying by vegetation class
+    (Hladik & Alber 2012, Remote Sensing of Environment 121:224-235).
+    Uncertainty band must be vegetation-class-conditional, not scalar.
+    Derive correction at derivative stage.
   mosaicking: >
     Precedence rule vs Phase 1 in overlap zone is an open decision.
     Phase 2 is later survey (2014 vs 2012) — more recent does not

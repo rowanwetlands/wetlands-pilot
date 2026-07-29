@@ -71,6 +71,7 @@ flags:
   - Vertical datum ODN sourced from SRSP project documentation not this metadata record
   - Basin interior no-data status ambiguous (water masking vs genuine gap) — do not interpret as confirmed coverage gap
   - Units field in WCS metadata (W.m-2.Sr-1) is a known service error; data is elevation metres
+  - LiDAR DTMs overestimate elevation in dense saltmarsh vegetation (canopy returns, not bare sediment); bias typically 0.1-0.3 m varying by vegetation class (Hladik & Alber 2012, Remote Sensing of Environment 121:224-235). Stated ~0.1 m RMSE is open-terrain only — uncertainty band must be vegetation-class-conditional, not scalar.
 
 technical_notes:
   transformation_to_epsg7405: >
@@ -88,9 +89,16 @@ technical_notes:
     masking or genuine survey gap, unresolved. Must be carried into
     gap-mask band as explicit absence, not interpolated or zeroed.
   vertical_accuracy: >
-    SRSP states approximately 0.1m RMSE for open terrain — this is the
-    uncertainty band value for LiDAR-sourced pixels. Confirm from SRSP
-    accuracy report before populating uncertainty band.
+    SRSP states approximately 0.1m RMSE for open terrain. This figure applies
+    to open-terrain pixels only. Airborne LiDAR DTMs systematically overestimate
+    ground elevation in dense saltmarsh vegetation because returns come from
+    the canopy, not bare sediment; reported bias is typically 0.1-0.3 m varying
+    by vegetation class (Hladik & Alber 2012, Remote Sensing of Environment
+    121:224-235). The uncertainty band for LiDAR-sourced pixels must therefore
+    be vegetation-class-conditional, not a single scalar — the 0.1 m RMSE
+    understates uncertainty exactly at the marsh margins where this layer is
+    most used. Confirm open-terrain RMSE from SRSP accuracy report; derive
+    vegetation-class correction at derivative stage.
   mosaicking: >
     Phase 1 and Phase 2 require overlap analysis and mosaicking at
     derivative stage. Precedence rule in overlap zone is an open decision
