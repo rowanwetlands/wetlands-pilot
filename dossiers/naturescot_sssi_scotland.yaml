@@ -1,0 +1,107 @@
+dataset_id: naturescot_sssi_scotland
+site: montrose
+title: NatureScot SSSI Scotland (EPSG:27700, GeoPackage)
+description: >
+  NatureScot Sites of Special Scientific Interest — Scotland-wide polygon dataset.
+  Single layer SSSI_SCOTLAND, 15877 features, EPSG:27700.
+  Source for Montrose Basin SSSI boundary (PA_CODE 1184, 9.51 km², Status: Current).
+  Full Scotland dataset archived as received; Montrose extraction is a derivative.
+  Contains Ordnance Survey data — attribution required (see provenance.attribution).
+  Layer updated 2025-10-16; Montrose feature last updated 2018-10-08.
+
+provenance:
+  source_url: https://www.nature.scot/professional-advice/protected-areas-and-species/protected-areas/national-designations/sites-special-scientific-interest
+  licence: OGL v3.0
+  redistributable: true
+  attribution: "(Copyright Scottish Natural Heritage) Contains Ordnance Survey data © Crown copyright and database right (2023)"
+  publisher: NatureScot (Scottish Natural Heritage)
+  data_last_updated: 2025-10-16  # DBF_DATE_LAST_UPDATE from layer metadata
+  montrose_feature_updated: 2018-10-08  # UPDATED field, PA_CODE 1184
+  download_date: 2026-07-17
+  retrieved_utc: FILL_AT_RETRIEVAL
+  retrieval_agent: rowan/manual-download
+
+source_characteristics:
+  format: GeoPackage (.gpkg)
+  driver: GPKG
+  crs_native: EPSG:27700
+  feature_count_total: 15877
+  geometry_type: Polygon
+  fields: [NAME, PA_CODE, STATUS, EUROPEAN_C, TYPE, SITE_HA, FEATURE_HA, UPDATED, MPA_NETWOR, GEOGRAPHIC, Shape_Leng, Shape_Area]
+  montrose_feature:
+    fid: 400
+    pa_code: 1184
+    name: Montrose Basin
+    status: Current
+    site_ha: 950.75
+    shape_area_m2: 9507523.89
+    european_c: "135478"
+    type: MIXED
+    mpa_networ: "Y"
+  delivered_files:
+    - SSSI_SCOTLAND.gpkg           # primary; 73MB; EPSG:27700
+    - SSSI_SCOTLAND_GPKG_27700.zip # repackaged copy; 27MB; assumed same CRS
+    - SSSI_SCOTLAND_metadata.html  # ISO 19139 HTML render
+    - SSSI_SCOTLAND_metadata.xml   # ISO 19139 XML
+    - Sites of Special Scientific Interest.lyr   # ESRI ArcMap layer file
+    - Sites of Special Scientific Interest.lyrx  # ESRI ArcGIS Pro layer file
+    - Sites of Special Scientific Interest.sld   # OGC Styled Layer Descriptor
+
+model_role:
+  tier: reference_boundary
+  role: sssi_boundary
+  use: >
+    Authoritative legal boundary of Montrose Basin SSSI (PA_CODE 1184).
+    Used to define the core study area extent and as a reference frame for
+    all spatial analysis. The full Scotland GPKG is archived as received;
+    the Montrose feature (PA_CODE=1184) is extracted as a derivative at
+    boundary/derived/naturescot_sssi_montrose_1184.gpkg.
+  dependencies:
+    requires: []
+    feeds:
+      - AOI definition (core SSSI boundary)
+      - terrain raster clip extent
+      - historical boundary regression reference frame
+
+readiness:
+  band: "C"
+  readiness_by_role:
+    sssi_boundary: "—"
+
+storage:
+  bucket: wetlands-raw-rowan
+  key_prefix: montrose/naturescot_sssi_scotland/2026-07-17__SSSI_SCOTLAND/
+  checksums_file: _checksums.sha256
+  sha256_gpkg: 553790bb8b305e8bcaec889cb1701d3972faabacd2159e28f058c8c07157f6cb
+  bytes_gpkg: 76546048  # 73M — verify against actual after upload
+
+flags:
+  - Full Scotland dataset archived; Montrose extraction (PA_CODE 1184) is a derivative — do not treat gpkg as Montrose-only
+  - SSSI_SCOTLAND_GPKG_27700.zip: assumed repackaging of same EPSG:27700 data — confirm CRS on unzip before use
+  - Attribution required on any publication using this data (see provenance.attribution)
+  - Montrose feature updated 2018-10-08 — check NatureScot for any subsequent boundary revisions before treating as current legal boundary
+  - .lyr/.lyrx/.sld are style files, not geometry; archived as received
+
+technical_notes:
+  derivative_extraction: >
+    Extract Montrose feature at derivative stage:
+    ogr2ogr -where "PA_CODE = 1184" \
+      boundary/derived/naturescot_sssi_montrose_1184.gpkg \
+      <raw_path>/SSSI_SCOTLAND.gpkg
+    DVC-track the derivative, not the raw.
+  crs_note: >
+    Native EPSG:27700 — no reprojection needed for project pipeline.
+    No vertical component (boundary polygon, 2D only).
+  zip_note: >
+    SSSI_SCOTLAND_GPKG_27700.zip not unpacked during intake — archived as received.
+    Unzip and inspect CRS before use; do not assume identical to .gpkg without verification.
+
+verification:
+  ogrinfo_feature_count: 15877
+  montrose_shape_area_m2: 9507523.89
+  montrose_shape_area_ha_derived: 950.75
+  crs_confirmed: EPSG:27700
+  geometry_type: Polygon
+  value_check: >
+    Shape_Area 9,507,523 m² = 9.51 km² consistent with known Montrose Basin
+    SSSI extent. Feature status Current. Plausibility confirmed.
